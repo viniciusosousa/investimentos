@@ -45,14 +45,80 @@
       <?php $this->renderOption($this->model->limitesVolume(), $this->model->volMax, true); ?>
       </select>
       </div>
+      <div class="form-row">
+      <div class="col-xs-6">
+      <label for="nome_papel">Nome do Papel</label>
+      <input type="text" name="nome_papel" class="form-control" value="">
+      </div>
+	  </div>
       </div>
       <input type="submit" >
 	</form>
 	</div>
+	<div>
+		<a href="<?= $this->home(true) ?>">Home</a>&nbsp;|&nbsp;
+		<a href="<?= $this->home(true).'?v=fav' ?>">Favoritos</a>&nbsp;|&nbsp;
+		<a href="<?= $this->home(true).'?v=carteira' ?>">Carteira</a>
+	</div>
 </nav>
 
 <div class="table-responsive-sm">
-	<?php $this->renderAcoes($this->model->acoes()); ?>
+	<?php
+		$arrayDados = $this->model->acoes();
+		foreach ($arrayDados as $linha)
+		{
+			echo '<div class="card">';
+			echo '<div class="card-header">';
+			$this->addParams('fav', $linha['COD_PAPEL']);
+			echo '<a href="'.$this->home().'">';
+			$this->removeParams('fav');
+			$flFavorito = $linha['Fav'];
+			echo '<i class="'.(($flFavorito)?'fas':'far').' fa-heart"></i></a>';
+			echo '<a href="'.$this->home(true).'?v=acao&cod_papel='.$linha['COD_PAPEL'].'"><h5 class="float-left">'.$linha['COD_PAPEL'].' - '.$linha['NOM_RES'].'</h5></a> <h4 class="float-right">'.$this->formatData('PRECO',$linha['PRECO_ULT']).'</h4></div>';
+			echo '<div class="card-body">';
+			echo '<table class="table table-sm text-center">';
+			echo '<thead><tr><th></th>';
+			$this->addParams('orderby', 'VAR_DIA');
+			echo '<th><a href="'.$this->home().'">D</a></th>';
+			$this->removeParams('orderby');
+			$this->addParams('orderby', 'VAR_SEM_ANT');
+			echo '<th><a href="'.$this->home().'">S</a></th>';
+			$this->removeParams('orderby');
+			$this->addParams('orderby', 'VAR_MES');
+			echo '<th><a href="'.$this->home().'">M</a></th>';
+			$this->removeParams('orderby');
+			$this->addParams('orderby', 'VAR_30D');
+			echo '<th><a href="'.$this->home().'">30D</a></th>';
+			$this->removeParams('orderby');
+			$this->addParams('orderby', 'VAR_ANO');
+			echo '<th><a href="'.$this->home().'">A</a></th>';
+			$this->removeParams('orderby');
+			if($this->orderby) $this->addParams('orderby', $this->orderby);
+			echo '</tr></thead>';
+			echo '<tbody>';
+			echo '<tr><td>Ultimo</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_DIA']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_SEM_ANT']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_MES']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_30D']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_ANO']).'</td></tr>';
+			echo '<tr><td>Medio</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_DIA_MED']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_SEM_ANT_MED']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_MES_MED']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_30D_MED']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_ANO_MED']).'</td></tr>';
+			$this->addParams('orderby', 'QTD_TOTAL');
+			echo '<tr><td colspan="6"><a href="'.$this->home().'">Volume</a>: '.$this->formatData('QTD',$linha['QTD_TOTAL']).'</td></tr>';
+			$this->removeParams('orderby');
+			echo '</tbody>';
+			echo '</table></div>';
+			echo '<div class="card-footer text-center">';
+			echo '<a target="_blank" href="https://br.tradingview.com/chart/?symbol=BMFBOVESPA:'.$linha['COD_PAPEL'].'">TradingView</a>&nbsp;|&nbsp;';
+			echo '<a target="_blank" href="https://br.advfn.com/bolsa-de-valores/bovespa/'.$linha['COD_PAPEL'].'/cotacao">ADVFN</a>';
+			echo '</div></div>';
+		}
+?>
 </div>
 <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 <script>

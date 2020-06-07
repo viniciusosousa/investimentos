@@ -6,6 +6,7 @@ class Controller
     protected $home;
     protected $orderby;
     protected $model;
+	protected $view;
     protected $output;
 
     protected function includeView($file){
@@ -13,7 +14,7 @@ class Controller
         if (file_exists($file)){
             ob_start();
             include $file;
-            return ob_get_clean();;
+            return ob_get_clean();
         }
         return false;
     }
@@ -23,9 +24,29 @@ class Controller
 	}
 
 
-	public function home()
+	protected function renderArrayJSON($arrayDados)
 	{
-        return $_SERVER['PHP_SELF'].'?'.$this->params();
+		echo json_encode($arrayDados);
+	}
+
+	protected function renderOption($iterator, $selectedValue, $number = false)
+	{
+		$option = '';
+$limite = (\is_array($iterator))?count($iterator):$iterator;
+		for ($i=1; $i<=$limite; $i++ ){
+			$value = (\is_array($iterator))?$iterator[$i-1]:$i;
+			$selected = ($selectedValue==$value)?' selected':'';
+			$option .= '<option value="'.$value.'"'.$selected.'>';
+			$option .= ($number)?number_format($value,0,',','.'):$value;
+			$option .='</option>';
+      	}
+		echo $option;
+	}
+
+
+	public function home($root=false)
+	{
+        return $_SERVER['PHP_SELF'].((count($_GET) && !$root)?('?'.$this->params()):'');
 	}
 
     protected function params(){

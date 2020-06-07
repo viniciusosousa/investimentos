@@ -31,7 +31,7 @@ class Model
 
     public function fetchRow($assoc = false)
     {
-        if(isset($this->rs)){
+		if(isset($this->rs)){
             $this->linhas = ($assoc)?$this->rs->fetch_assoc():$this->rs->fetch_row();
             return $this->linhas;
         }
@@ -43,6 +43,7 @@ class Model
         if($this->sql){
         /*echo $this->sql.'<br>';*/
         $this->rs = Model::$conn->query($this->sql);
+		if(!$this->rs) die(Model::$conn->error);
         if(isset($this->rs) and gettype($this->rs)=='object'){
             $objcolunas = $this->rs->fetch_fields();
             $this->colunas = array_map(function($obj){return $obj->name;}, $objcolunas);

@@ -29,22 +29,18 @@ class Ranking extends Model
                                         ,nom_res
                                         ,preco_ult
                                         ,var_dia
+										,var_sem_ant
                                         ,var_mes
+										,var_30d
                                         ,var_ano
                                         ,var_dia_med
+										,var_sem_ant_med
                                         ,var_mes_med
+										,var_30d_med
                                         ,var_ano_med
                                         ,qtd_total
                                FROM financas.vw_mais_negociadas_ultm_prgo_setor";
-    const SQL_ACAO =  "SELECT  data_pregao
-                                         ,preco_ult
-                                        , preco_med
-                                         ,var_dia
-                                         ,var_mes
-                                         ,var_ano
-                                         ,qtd_total
-                               FROM financas.vw_hist_cotacao
-                               WHERE cod_papel=";
+
     const INS_ACAO_FAV = "INSERT IGNORE INTO financas.DIM_ACAO_FAVORITOS SET COD_PAPEL=";
     const DEL_ACAO_FAV = "DELETE FROM financas.DIM_ACAO_FAVORITOS WHERE COD_PAPEL=";
     const SEL_ACAO_FAV = "SELECT COD_PAPEL FROM financas.DIM_ACAO_FAVORITOS WHERE COD_PAPEL=";
@@ -105,6 +101,15 @@ class Ranking extends Model
 	private function getWhere()
 	{
 
+
+		$nomeFilter = '';
+        if (isset($_GET['nome_papel']))
+            $nomeFilter = ' (COD_PAPEL LIKE "%'.$_GET['nome_papel'].'%" OR NOM_RES LIKE "%'.$_GET['nome_papel'].'%")';
+
+		$favFilter = '';
+        if (isset($_GET['v']) && $_GET['v']='fav')
+            $favFilter = 'fl_favorito = 1';
+
         if (isset($_GET['vol_min']) && $_GET['vol_min']>0)
             $this->volMin = $_GET['vol_min'];
 
@@ -128,12 +133,14 @@ class Ranking extends Model
 
 		$segmentoFilter ='';
 		if ($this->segmento){
-           $segmentoFilter = 'SEGMENTO = "'.$segmento.'"';
+           $segmentoFilter = 'SEGMENTO = "'.$this->segmento.'"';
            }
 
 		$where = array();
 		if($qtdFilter) array_push($where, $qtdFilter);
 		if($segmentoFilter) array_push($where, $segmentoFilter);
+		if($favFilter) array_push($where, $favFilter);
+		if($nomeFilter) array_push($where, $nomeFilter);
         if (count($where)) return ' WHERE '.implode(' AND ',$where);
 		return '';
 	}
