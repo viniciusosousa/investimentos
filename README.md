@@ -21,7 +21,7 @@ Baixe o projeto:
 
 Depois inicialize os servidores
 
-`php -S localhost:8080 -t /sdcard/investimentos &`
+`php -S localhost:8080 -t /sdcard/investimentos &` <br>
 `mysql_safe &`
 
 Ai pode digitar no navegador:
