@@ -10,6 +10,7 @@ class Ranking extends Model
     public $pagina;
     public $itens;
 	public $paginas;
+	public $dataCorte;
 	private $_segmentos;
 	private $_colunas;
 	private $_acoes;
@@ -44,7 +45,7 @@ class Ranking extends Model
     const INS_ACAO_FAV = "INSERT IGNORE INTO financas.DIM_ACAO_FAVORITOS SET COD_PAPEL=";
     const DEL_ACAO_FAV = "DELETE FROM financas.DIM_ACAO_FAVORITOS WHERE COD_PAPEL=";
     const SEL_ACAO_FAV = "SELECT COD_PAPEL FROM financas.DIM_ACAO_FAVORITOS WHERE COD_PAPEL=";
-
+	const SEL_CORTE	   = "SELECT ULTM_FOTO_PRGO FROM financas.vw_ultimo_foto";
 
     public function __construct()
     {
@@ -56,9 +57,10 @@ class Ranking extends Model
 		$this->segmento = '';
 		$this->_segmentos = array();
 		$this->_acoes = array();
-
+		$this->dataCorte = '';
 		$this->updateFavorito();
 		$this->carregaSegmentos();
+		$this->carregaCorte();
 
 		$where = $this->getWhere();
 		$limit = $this->getLimit($where);
@@ -181,6 +183,15 @@ class Ranking extends Model
             }
             unset($_GET['fav']);
         }
+	}
+
+
+	private function carregaCorte()
+	{
+		$this->sql = self::SEL_CORTE;
+        $this->query();
+		$this->fetchRow();
+		$this->dataCorte = \DateTime::createFromFormat('Y-m-d',$this->linhas[0])->format('d/m/Y');
 	}
 
 	private function carregaSegmentos()

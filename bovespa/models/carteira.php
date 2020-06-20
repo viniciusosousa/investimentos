@@ -30,11 +30,13 @@ class Carteira extends Ranking
 ,@montante_atual := sq_aplicacoes.qtd * a.preco_ult as montante_atual
 ,@montante_atual - @montante as saldo_operacao
 										FROM financas.vw_mais_negociadas_ultm_prgo_setor a
-										INNER JOIN (SELECT  cod_papel
+										INNER JOIN (SELECT cod_papel
                                        				 	,sum(a.qtd*case when id_tipo_operacao=2 then -1 else 1 end) as qtd
                                         				,sum(a.qtd*(a.valor_unitario*case when id_tipo_operacao=2 then -1 else 1 end))/sum(a.qtd) as valor_unitario
                                							FROM financas.tb_aplicacoes a
-														group by 1) sq_aplicacoes ON a.cod_papel = sq_aplicacoes.cod_papel";
+														group by 1
+														having qtd > 0
+													) sq_aplicacoes ON a.cod_papel = sq_aplicacoes.cod_papel";
 
 	const SQL_APLICACOES =  "SELECT *
                                FROM financas.tb_aplicacoes";

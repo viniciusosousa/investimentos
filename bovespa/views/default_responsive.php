@@ -64,6 +64,7 @@
 
 <div class="table-responsive-sm">
 	<?php
+		echo 'Corte: '.$this->model->dataCorte;
 		$arrayDados = $this->model->acoes();
 		foreach ($arrayDados as $linha)
 		{
