@@ -1,26 +1,43 @@
 <?php
 namespace vini\app;
+class useCase
+{
 
+}
 class Controller
 {
     protected $home;
     protected $orderby;
-    protected $model;
-	protected $view;
-    protected $output;
+	protected $useCases = [];
+    protected $models = [];
+	protected $views = [];
+	private   $useCase;
+    protected $output = '';
+	protected $model = null;
+	protected $path ='';
+        public function __construct(){
+	    $this->useCase = (isset($_GET['v']))?$_GET['v']:'default';
+	}
 
-    protected function includeView($file){
+	protected function addUseCase($useCase, $view, $model = NULL){
+		array_push($this->useCases, $useCase);
+		$this->views[$useCase] = $view;
+		if(!is_null($model))
+			$this->models[$useCase] = $model;
+}
 
-        if (file_exists($file)){
+	public function render($file){
+		if(isset($this->models[$this->useCase])){
+		$model = "\\vini\\".$this->path."\\models\\".$this->models[$this->useCase];
+		$this->model = new $model;
+		}
+		$view = $this->path.'/views/'.$this->views[$this->useCase];
+		if(file_exists($view)){
             ob_start();
-            include $file;
-            return ob_get_clean();
+            include $view;
+            $this->output = ob_get_clean();
         }
-        return false;
-    }
-
-	public function render($output){
-		 echo $this->includeView($output);
+		include $file;
 	}
 
 

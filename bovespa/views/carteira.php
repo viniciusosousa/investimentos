@@ -100,9 +100,27 @@
 			$this->addParams('orderby', 'saldo_operacao');
 			echo '<tr><td colspan="5"><a href="'.$this->home().'">Saldo</a>: '.$this->formatData('PRECO',$linha['saldo_operacao']).'</td></tr>';
 			$this->removeParams('saldo_operacao');
+			$this->addParams('orderby', 'saldo_acumulado');
+			echo '<tr><td colspan="5"><a href="'.$this->home().'">Saldo Acum.</a>: '.$this->formatData('PRECO',$linha['saldo_acumulado']).'</td></tr>';
+			$this->removeParams('saldo_acumulado');
 			echo '<tr><td colspan="5">Valor: '.$this->formatData('PRECO',$linha['montante_atual']).'</td></tr>';
+			$operacoes = $this->model->carregaOperacoes($linha['COD_PAPEL']);
 			echo '</tbody>';
-			echo '</table></div></div>';
+			echo '</table>';
+			echo '<center><b><u>Operacoes</u></b></center>';
+			echo '<div class="table-responsive">';
+			echo '<table class="table table-sm"><tr><th>dia</th><th>tipo</th><th>qtd</th><th>vl unit.</th><th>vl total</th><th>resultado</th></tr>';
+			foreach ($operacoes as $operacao){
+				echo '<tr><td>'.date('d/m/y', strtotime($operacao['DATA_OPERACAO'])).'</td>';
+				echo '<td>'.(($operacao['ID_TIPO_OPERACAO']=='1')?'C':'V').'</td>';
+				echo '<td>'.$this->formatData('QTD',$operacao['QTD']*(($operacao['ID_TIPO_OPERACAO']=='1')?1:-1)).'</td>';
+				echo '<td>'.$this->formatData('PRECO',$operacao['VALOR_UNITARIO']*(($operacao['ID_TIPO_OPERACAO']=='1')?1:-1)).'</td>';
+				echo '<td>'.$this->formatData('PRECO',$operacao['vl_total']).'</td>';
+				echo '<td>'.$this->formatData('PRECO',$operacao['resultado']).'</td></tr>';
+			}
+			echo '</table>';
+			echo '</div>';
+			echo '</div></div>';
 		}
 ?>
 </div>

@@ -21,7 +21,8 @@ class Acao extends Model
     {
 		parent::__construct();
 		$this->_acao = array();
-		$this->carregaAcao($_GET['cod_papel']);
+		if(isset($_GET['cod_papel']))
+			$this->carregaAcao($_GET['cod_papel']);
 	}
 
 	public function codPapel()

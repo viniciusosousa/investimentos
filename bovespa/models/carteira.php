@@ -26,20 +26,25 @@ class Carteira extends Ranking
 						  ,sq_aplicacoes.valor_unitario as vl_unit_aplicacao
 						  ,financas.var_preco(a.preco_ult, sq_aplicacoes.valor_unitario) var_aplicacao
 						  ,financas.var_preco(a.preco_med, sq_aplicacoes.valor_unitario) var_aplicacao_med
-										,@montante := sq_aplicacoes.qtd * sq_aplicacoes.valor_unitario as montante
+										,@montante := sq_aplicacoes.vl_total as montante
 ,@montante_atual := sq_aplicacoes.qtd * a.preco_ult as montante_atual
-,@montante_atual - @montante as saldo_operacao
+,@saldo_operacao := @montante_atual - @montante as saldo_operacao
+,@saldo_operacao + sq_aplicacoes.resultado as saldo_acumulado
 										FROM financas.vw_mais_negociadas_ultm_prgo_setor a
-										INNER JOIN (SELECT cod_papel
-                                       				 	,sum(a.qtd*case when id_tipo_operacao=2 then -1 else 1 end) as qtd
-                                        				,sum(a.qtd*(a.valor_unitario*case when id_tipo_operacao=2 then -1 else 1 end))/sum(a.qtd) as valor_unitario
+										INNER JOIN (SELECT a.cod_papel
+                                       				 	, a.qtd_total as qtd
+                                        				, a.vl_medio as valor_unitario
+														, a.vl_total
+														, b.resultado
                                							FROM financas.tb_aplicacoes a
-														group by 1
-														having qtd > 0
+														INNER JOIN (select a.cod_papel, max(a.indice) as indice, sum(a.resultado) as resultado
+																	from financas.tb_aplicacoes a
+																	group by 1) b on a.cod_papel = b.cod_papel and a.indice = b.indice
+														WHERE a.qtd_total >0
 													) sq_aplicacoes ON a.cod_papel = sq_aplicacoes.cod_papel";
 
-	const SQL_APLICACOES =  "SELECT *
-                               FROM financas.tb_aplicacoes";
+	const SQL_OPERACOES =  "SELECT *
+                               FROM financas.tb_aplicacoes WHERE cod_papel='";
 
 
     const INS_CARTEIRA = "INSERT IGNORE INTO financas.tb_aplicacoes SET ";
@@ -100,7 +105,7 @@ class Carteira extends Ranking
 
 	public function carregaOperacoes($cod_papel)
 	{
-        $this->sql = self::SQL_OPERACOES.' WHERE COD_PAPEL="'.$cod_papel.'" ORDER BY DATA_OPERACAO';
+        $this->sql = self::SQL_OPERACOES.$cod_papel."' ORDER BY DATA_OPERACAO";
         $this->query();
 		$operacoes = array();
 		while($this->fetchRow(true))

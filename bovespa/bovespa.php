@@ -2,42 +2,21 @@
 namespace vini\bovespa;
 use vini\app\Controller;
 use vini\app\Model;
-use vini\bovespa\models\ranking;
-use vini\bovespa\models\carteira;
-use vini\bovespa\models\acao as AcaoModel;
-
 class Bovespa extends Controller
 {
     public function __construct()
     {
+		parent::__construct();
+		$this->path = 'bovespa';
+		$this->addUseCase('default','default_responsive.php', 'Ranking');
 
-	    $view = '';
+		$this->addUseCase('acao','acao.php', 'Acao');
 
-		if(isset($_GET['v'])){
-            $view = $_GET['v'];
-        }
+		$this->addUseCase('fav','default_responsive.php', 'Ranking');
 
-        switch($view){
-            case 'acao':
-                $this->model = new AcaoModel;
-                $this->output .= $this->includeView('bovespa/views/acao.php');
-            break;
-
-			case 'fav':
-				$this->model = new Ranking;
-                $this->output .= $this->includeView('bovespa/views/default_responsive.php');
-			break;
-
-			case 'carteira':
-				$this->model = new Carteira;
-                $this->output .= $this->includeView('bovespa/views/carteira.php');
-			break;
-
-            default:
-				$this->model = new Ranking;
-                $this->output .= $this->includeView('bovespa/views/default_responsive.php');
-        }
+		$this->addUseCase('carteira','carteira.php', 'Carteira');
     }
+
 
 
 	protected function formatData($coluna, $linha){
