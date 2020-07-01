@@ -27,6 +27,7 @@ class Controller
 }
 
 	public function render($file){
+
 		if(isset($this->models[$this->useCase])){
 		$model = "\\vini\\".$this->path."\\models\\".$this->models[$this->useCase];
 		$this->model = new $model;

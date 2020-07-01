@@ -10,7 +10,9 @@ class Carteira extends Ranking
     public $qtd_acoes;
     public $vl_unitario;
 	private $_carteira;
-    const SQL_CARTEIRA =  "SELECT
+    const SQL_CARTEIRA =  "SELECT sq.*
+							from (
+						   SELECT
                            a.segmento
                           ,a.cod_papel
                           ,a.nom_res
@@ -41,7 +43,7 @@ class Carteira extends Ranking
 																	from financas.tb_aplicacoes a
 																	group by 1) b on a.cod_papel = b.cod_papel and a.indice = b.indice
 														WHERE a.qtd_total >0
-													) sq_aplicacoes ON a.cod_papel = sq_aplicacoes.cod_papel";
+													) sq_aplicacoes ON a.cod_papel = sq_aplicacoes.cod_papel) sq";
 
 	const SQL_OPERACOES =  "SELECT *
                                FROM financas.tb_aplicacoes WHERE cod_papel='";
