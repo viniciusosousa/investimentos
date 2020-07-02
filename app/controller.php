@@ -1,9 +1,6 @@
 <?php
 namespace vini\app;
-class useCase
-{
 
-}
 class Controller
 {
     protected $home;

@@ -16,6 +16,10 @@ No android instale o **Termux** e instale o PHP, MariaDB e o Git:
 
 `pkg update && pkg upgrade && pkg install php mariadb git`
 
+No Linux instale o PHP, MariaDB e o Git
+
+`sudo apt-get update && sudo apt-get upgrade && sudo apt-get install php-fpm php-curl php-mysql mariadb-server git`
+
 Baixe o projeto:
 `git clone https://github.com/viniciusosousa/investimentos.git`
 
