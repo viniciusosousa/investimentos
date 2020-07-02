@@ -4,6 +4,7 @@ index_.php
 snes/
 teste*.*
 /cargas/txt/COTAHIST.TXT
+COTAHIST*
 carga_next.txt
 tutoriais/
 phpmyadmin/
@@ -11,3 +12,4 @@ cargas/txt/
 .htaccess
 blogger/
 cache/
+/vendor/

@@ -10,7 +10,7 @@ spl_autoload_register(function (String $class)
 	$file = str_replace($vendor, __DIR__, $class).'.php';
 
     $file = strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $file));
-    echo "\r\npath: ".$file."\n";
+    //echo "\r\npath: ".$file."\n";
 	if (file_exists($file)) {
         require($file);
         }

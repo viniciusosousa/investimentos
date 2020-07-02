@@ -1,0 +1,14 @@
+{
+    "name": "vini/investimentos",
+    "description": "Uma aplicação web para carregar o arquivo disponibilizado pela página de séries históricas da Bovespa e criar visões que ajudem a encontrar oportunidades.",
+    "type": "project",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Vinicius Oliveira",
+            "email": "vinicius.o.sousa@hotmail.com"
+        }
+    ],
+    "require": {
+    }
+}
