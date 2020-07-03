@@ -34,7 +34,8 @@ Ai pode digitar no navegador:
 
 # Carga da base da bovespa
 
-- Faça download e carregue no banco de dados com `localhost:8080/carga.php`
-- Depois do upload clique no link **carga Bovespa**
-- É possive carregar a carga de dia, mes ou ano.
-- Após carregar os arquivos que precisar clique em **Atualiza Cortes de preços bovespa** para criar os cálculos das variações e rankings
+- Acesse `localhost:8080/carga.php`
+- O arquivo da bovespa será disponibilizado automaticamente e carregado no banco de dados (Os arquivos normalmente são disponibilizados após as 20:00 hrs)
+- Caso deseje fazer a carga manualmente, baixe o arquivo desejado e utilize o formulário para fazer upload.
+- É possive carregar os arquivos de dia, mes ou ano.
+- Após carregar os arquivos manualmente é necessário clicar em **Atualiza Cortes de preços bovespa** para criar os cálculos das variações e rankings. Esse passo é executado automaticamente caso use a carga automática.
