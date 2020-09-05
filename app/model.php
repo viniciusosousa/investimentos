@@ -31,7 +31,7 @@ class Model
 
     public function fetchRow($assoc = false)
     {
-		if(isset($this->rs)){
+	if(isset($this->rs)){
             $this->linhas = ($assoc)?$this->rs->fetch_assoc():$this->rs->fetch_row();
             return $this->linhas;
         }

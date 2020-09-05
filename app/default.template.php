@@ -14,13 +14,14 @@
 
 	<style>
 		body {
-			/*font-family: 'Montserrat', sans-serif;*/
+			font-family: 'Montserrat', sans-serif;
 		}
-      .thead-dark  {
-          color: white;
-          }
+      		.thead-dark  {
+          		color: white;
+          	}
 	</style>
   </head>
+
   <body>
       <div class="container-fluid">
       <?= $this->output ?>

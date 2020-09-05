@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<img src="/img/candlestick.png" width="30" height="30" alt="">
+	<a class="navbar-brand" href="#">{% block titulo %}{% endblock %}</a>
+	<button class="navbar-toggler"
+			type="button"
+			data-toggle="collapse"
+			data-target="#navbarMenu"
+			aria-controls="navbarMenu"
+			aria-expanded="false"
+			aria-label="Toggle navigation">
+    	<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarMenu">
+		{% block form %}{% endblock %}
+	</div>
+	<div>
+		<a href="{{ controller.home(true) }}">Home</a>&nbsp;|&nbsp;
+		<a href="{{ controller.home(true) }}?v=fav">Favoritos</a>&nbsp;|&nbsp;
+		<a href="{{ controller.home(true) }}?v=carteira">Carteira</a>
+	</div>
+</nav>
+
+<div class="table-responsive-sm">
+	{% block conteudo %}
+	{% endblock %}
+</div>
+<div>Icons made by 
+	<a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
+	from 
+	<a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+</div>
+<script>
+	/*var acoes = <?php /*$this->renderArrayJSON($this->model->acoes()); */?>;*/
+</script>

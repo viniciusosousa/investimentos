@@ -1,0 +1,93 @@
+
+{% extends "default.twig.html" %}
+{% use "filtros_acoes.twig.html" %}
+
+{% block titulo %}Ranking{% endblock %}
+
+{% block conteudo %}
+{% for linha in model.acoes() %}
+		<div class="card">
+		<div class="card-header">
+			<a href="{{ controller.home() }}">
+				<i class="{{linha.Fav?'fas':'far'}} fa-heart"></i>
+			</a>
+			<a href="{{ controller.home(true) }}?v=acao&cod_papel={{ linha.COD_PAPEL }}">
+                  		<h5 class="float-left">{{ "#{linha.COD_PAPEL} - #{linha.NOM_RES}" }}</h5>
+              		</a>
+              		<h4 class="float-right">
+			{% if model.isCarteira %} 
+			{{ linha.vl_unit_aplicacao|number_format(2, ',', '.') }}/
+			{% endif %}
+			{{ linha.PRECO_ULT|number_format(2, ',', '.') }}</h4>
+		</div>
+		<div class="card-body">
+			<table class="table table-sm text-center">
+			<thead>
+				<tr>
+				<th></th>
+				{% if model.isCarteira %}
+				<th><a href="{{ 'var_aplicacao' | orderby }}">C</a></th>
+				{% endif %}
+				<th><a href="{{ 'VAR_DIA' 	| orderby }}">D</a></th>
+				<th><a href="{{ 'VAR_SEM_ANT' 	| orderby }}">S</a></th>
+				<th><a href="{{ 'VAR_MES'	| orderby }}">M</a></th>
+				<th><a href="{{ 'VAR_30D'	| orderby }}">30D</a></th>
+				<th><a href="{{ 'VAR_ANO'	| orderby }}">A</a></th>
+			</tr></thead>
+			<tbody>
+			<tr><td>Último</td>
+				{% if model.isCarteira %}
+				<td>{{linha.var_aplicacao|number_format(2, ',', '.')|format_colors|raw }}</td>
+				{% endif %}
+				<td>{{linha.VAR_DIA|number_format(2, ',', '.')|format_colors|raw }}</td>
+				<td>{{linha.VAR_SEM_ANT|number_format(2, ',', '.')|format_colors|raw }}</td>
+				<td>{{linha.VAR_MES|number_format(2, ',', '.')|format_colors|raw }}</td>
+				<td>{{linha.VAR_30D|number_format(2, ',', '.')|format_colors|raw }}</td>
+				<td>{{linha.VAR_ANO|number_format(2, ',', '.')|format_colors|raw }}</td>
+			</tr>
+			<tr><td>Médio</td>
+				{% if model.isCarteira %}
+				<td>{{linha.var_aplicacao_med|number_format(2, ',', '.')|format_colors|raw }}</td>
+				{% endif %}
+				<td>{{linha.VAR_DIA_MED|number_format(2, ',', '.')|format_colors }}</td>
+				<td>{{linha.VAR_SEM_ANT_MED|number_format(2, ',', '.')|format_colors }}</td>
+				<td>{{linha.VAR_MES_MED|number_format(2, ',', '.')|format_colors }}</td>
+				<td>{{linha.VAR_30D_MED|number_format(2, ',', '.')|format_colors }}</td>
+				<td>{{linha.VAR_ANO_MED|number_format(2, ',', '.')|format_colors }}</td>
+			</tr>
+			<tr><td colspan="6"><a href="{{ 'QTD_TOTAL' | orderby}}">Volume</a>:{{linha.QTD_TOTAL|number_format(0, ',', '.') }}</td></tr>
+			{% if model.isCarteira %}
+			<tr><td colspan="6"><a href="{{ 'saldo_operacao'  | orderby }}">Saldo:</a> {{linha.saldo_operacao |number_format(2, ',', '.') | format_colors }}</td></tr>
+			<tr><td colspan="6"><a href="{{ 'saldo_acumulado' | orderby }}">Saldo Acum:</a> {{linha.saldo_acumulado |number_format(2, ',', '.') | format_colors }}</td></tr>
+			{% endif %}
+			</tbody>
+			</table></div>
+			{% if model.isCarteira %}
+			<center><b><u>Operacoes</u></b></center>
+			<div class="table-responsive">
+			<table class="table table-sm"><tr>
+					<th>dia</th>
+					<th>tipo</th>
+					<th>qtd</th>
+					<th>vl unit.</th>
+					<th>vl total</th>
+					<th>resultado</th>
+				</tr>
+				{% for operacao in model.carregaOperacoes( linha.COD_PAPEL) %}
+				<tr><td>{{ operacao.DATA_OPERACAO | date('d/m/y') }}</td>
+					<td>{{ (operacao.ID_TIPO_OPERACAO)?'C':'V' }}</td>
+					<td>{{ (operacao.QTD * ((operacao.ID_TIPO_OPERACAO)?1:-1)) |number_format(0, ',', '.')}}</td>
+					<td>{{ (operacao.VALOR_UNITARIO * ((operacao.ID_TIPO_OPERACAO)?1:-1)) |number_format(2, ',', '.')}}</td>
+					<td>{{ operacao.vl_total |number_format(2, ',', '.')}}</td>
+					<td>{{ operacao.resultado |number_format(2, ',', '.')|format_colors }}</td></tr>
+				{% endfor %}
+			</table>
+			</div>
+			{% endif %}
+
+			<div class="card-footer text-center">
+				<a target="_blank" href="https://br.tradingview.com/chart/?symbol=BMFBOVESPA:{{linha.COD_PAPEL}}">TradingView</a>&nbsp;|&nbsp;
+				<a target="_blank" href="https://br.advfn.com/bolsa-de-valores/bovespa/{{linha.COD_PAPEL}}/cotacao">ADVFN</a>
+			</div></div>
+	{% endfor %}
+	{% endblock %}

@@ -1,0 +1,45 @@
+{% block form %} 
+<form action="{{ controller.home() }}" method="get">
+      		<input type="hidden" name="orderby" value="{{ model.orderby('') }}">
+      		<label for="segmento">Segmento: </label>
+      		<select name="segmento" class="form-control">
+      	<option value="">Nenhum</option>
+      	 {{ renderOption(model.segmentos(), model.segmento) }}
+      </select>
+      <div class="form-row">
+      <div class="col-xs-6">
+      <label for="qtd_pagina">Qtd por Pagina: </label>
+      <input type="number" name="qtd_pagina" class="form-control" value="<?= $this->model->itens ?>">
+      </div>
+      <div class="col-xs-6">
+      <label for="pagina">Pagina: </label>
+      <select name="pagina" class="form-control">
+     	{{ renderOption(model.paginas, model.pagina) }}
+      </select>
+      </div>
+      </div>
+      <div class="form-row">
+      <div class="col-xs-6">
+      <label for="vol_min">Volume Mínimo: </label>
+      <select name="vol_min" class="form-control">
+      <option value="0">Todos</option>
+        {{ renderOption(model.limitesVolume(), model.volMin, true) }}
+      </select>
+      </div>
+      <div class="col-xs-6">
+       <label for="vol_max">Volume Máximo: </label>
+      <select name="vol_max" class="form-control">
+      <option value="0">Todos</option>
+        {{ renderOption(model.limitesVolume(), model.volMax, true) }}
+      </select>
+      </div>
+      	<div class="form-row">
+      	<div class="col-xs-6">
+      		<label for="nome_papel">Nome do Papel</label>
+      		<input type="text" name="nome_papel" class="form-control" value="">
+      	</div>
+	  </div>
+      		</div>
+      		<input type="submit" >
+</form>
+{% endblock %}

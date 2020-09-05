@@ -1,0 +1,40 @@
+{% block form %}
+<form action="{{ controler.home() }}" method="get">
+	<input type="hidden" name="orderby" value="{{ model.orderby('') }}">
+      <input type="hidden" name="v" value="carteira">
+      <div class="form-row">
+		<div class="col">
+		 <label for="tipo_operacao">Tipo Operacao: </label>
+		 <div class="form-check form-check-inline">
+  		 <input class="form-check-input" type="radio" name="tipo_operacao" id="tipo_operacao1" value="1">
+  		 <label class="form-check-label" for="tipo_operacao1">Compra</label>
+		 </div>
+		 <div class="form-check form-check-inline">
+ 		 <input class="form-check-input" type="radio" name="tipo_operacao" id="tipo_operacao2" value="2">
+ 		 <label class="form-check-label" for="tipo_operacao2">Venda</label>
+		 </div>
+		 </div>
+		</div>
+      <div class="form-row">
+     	 <div class="col">
+      		<label for="cod_papel">Código do Papel</label>
+     		 <input type="text" name="cod_papel" class="form-control" value="">
+   		 </div>
+		 <div class="col">
+     		 <label for="data_operacao">Data Operação</label>
+		 <input type="text" name="data_operacao" class="form-control" value="{{ "now" | date("d/m/Y") }}">
+		 </div>
+	  </div>
+      <div class="form-row">
+      <div class="col">
+      <label for="qtd_pagina">Qtd ações: </label>
+      <input type="number" name="qtd_acoes" class="form-control" value="">
+      </div>
+      <div class="col">
+      <label for="pagina">Valor unitário: </label>
+      <input type="text" name="vl_unitario" class="form-control" value="">
+      </div>
+      </div>
+      <input type="submit" >
+	</form>
+{% endblock %}

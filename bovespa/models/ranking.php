@@ -4,11 +4,11 @@ use vini\app\Model;
 
 class Ranking extends Model
 {
-    public $segmento;
-    public $volMin;
-    public $volMax;
-    public $pagina;
-    public $itens;
+    	public $segmento;
+    	public $volMin;
+    	public $volMax;
+    	public $pagina;
+    	public $itens;
 	public $paginas;
 	public $dataCorte;
 	private $_segmentos;
@@ -30,14 +30,14 @@ class Ranking extends Model
                                         ,nom_res
                                         ,preco_ult
                                         ,var_dia
-										,var_sem_ant
+					,var_sem_ant
                                         ,var_mes
-										,var_30d
+					,var_30d
                                         ,var_ano
                                         ,var_dia_med
-										,var_sem_ant_med
+					,var_sem_ant_med
                                         ,var_mes_med
-										,var_30d_med
+					,var_30d_med
                                         ,var_ano_med
                                         ,qtd_total
                                FROM financas.vw_mais_negociadas_ultm_prgo_setor";
@@ -50,9 +50,9 @@ class Ranking extends Model
     public function __construct()
     {
 		parent::__construct();
-        $this->volMin   = 0;
-        $this->volMax   = 0;
-        $this->itens    = 25;
+ 		$this->volMin   = 0;
+        	$this->volMax   = 0;
+        	$this->itens    = 25;
 		$this->pagina   = 1;
 		$this->segmento = '';
 		$this->_segmentos = array();
@@ -102,24 +102,22 @@ class Ranking extends Model
 
 	private function getWhere()
 	{
-
-
 		$nomeFilter = '';
-        if (isset($_GET['nome_papel']))
-            $nomeFilter = ' (COD_PAPEL LIKE "%'.$_GET['nome_papel'].'%" OR NOM_RES LIKE "%'.$_GET['nome_papel'].'%")';
+        	if (!empty($_GET['nome_papel']))
+            	$nomeFilter = ' (COD_PAPEL LIKE "%'.$_GET['nome_papel'].'%" OR NOM_RES LIKE "%'.$_GET['nome_papel'].'%")';
 
 		$favFilter = '';
-        if (isset($_GET['v']) && $_GET['v']='fav')
-            $favFilter = 'fl_favorito = 1';
+        	if (!empty($_GET['v']) && $_GET['v']='fav')
+            	$favFilter = 'fl_favorito = 1';
 
-        if (isset($_GET['vol_min']) && $_GET['vol_min']>0)
-            $this->volMin = $_GET['vol_min'];
+        	if (!empty($_GET['vol_min']) && $_GET['vol_min']>0)
+            	$this->volMin = $_GET['vol_min'];
 
-        if (isset($_GET['vol_max']) && $_GET['vol_max']>0)
-            $this->volMax = $_GET['vol_max'];
+        	if (!empty($_GET['vol_max']) && $_GET['vol_max']>0)
+            	$this->volMax = $_GET['vol_max'];
 
 		$qtdFilter = '';
-        if ($this->volMin)
+        	if ($this->volMin)
 		{
 			if ($this->volMax)
 			{
@@ -130,7 +128,7 @@ class Ranking extends Model
 			}
 		}
 
-        if (isset($_GET['segmento']))
+        if (!empty($_GET['segmento']))
             $this->segmento = $_GET['segmento'];
 
 		$segmentoFilter ='';
@@ -149,18 +147,17 @@ class Ranking extends Model
 
 	private function getLimit($where)
 	{
-        if (isset($_GET['qtd_pagina']))
-            $this->itens = (int)$_GET['qtd_pagina'];
-			$this->sql = str_replace('{{itens}}', $this->itens, self::QTD_PAGINAS).$where;
-            $this->query();
-          	$this->fetchRow();
-            $this->paginas = (int)$this->linhas[0];
+        if (!empty($_GET['qtd_pagina']))
+            	$this->itens = (int)$_GET['qtd_pagina'];
+	$this->sql = str_replace('{{itens}}', $this->itens, self::QTD_PAGINAS).$where;
+        $this->query();
+        $this->fetchRow();
+        $this->paginas = (int)$this->linhas[0];
 
-        if (isset($_GET['pagina']))
+        if (!empty($_GET['pagina']))
             $this->pagina = (int)$_GET['pagina'];
 
-			$limit = ' LIMIT '.(($this->itens*$this->pagina)-($this->itens)).', '.$this->itens;
-
+		$limit = ' LIMIT '.(($this->itens*$this->pagina)-($this->itens)).', '.$this->itens;
 		return $limit;
 	}
 
@@ -208,7 +205,8 @@ class Ranking extends Model
 	private function carregaRankingAcoes($where, $limit, $orderby)
 	{
         $this->sql = 'SELECT * FROM ('.self::SQL_RANK.$where.$limit.') as sub_qry '.$orderby;
-        $this->query();
+	//echo $this->sql;
+	$this->query();
 		while($this->fetchRow(true))
 		{
 			array_push($this->_acoes, $this->linhas);

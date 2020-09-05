@@ -45,6 +45,7 @@ error_reporting(E_ALL);?>
 
 	const SEL_CORTE	   = "SELECT ULTM_FOTO_PRGO FROM financas.vw_ultimo_foto";
 
+	$fl_cargaliberada = false;
 	$corte = new Model;
 	$corte->sql = SEL_CORTE;
 	$corte->query();
@@ -60,13 +61,15 @@ error_reporting(E_ALL);?>
 			$path = 'http://bvmf.bmfbovespa.com.br/InstDados/SerHist/'.$file;
 			$handle = @fopen($path, 'r');
 			if ($handle){
-			echo 'Baixando '.$file.'<br>';
-			copy($path, $file);
-			processaZip($file);
-			Model::exeSqlFile('sql/bovespa.sql');
+			  $fl_cargaliberada = true;
+              echo 'Baixando '.$file.'<br>';
+              copy($path, $file);
+              processaZip($file);
+              Model::exeSqlFile('sql/bovespa.sql');
 			}
-			Model::exeSqlFile('sql/bovespa_atualiza_precos.sql');
 		}
+		if($fl_cargaliberada)
+			Model::exeSqlFile('sql/bovespa_atualiza_precos.sql');
 	}
 	function processaZip($arquivo){
 		    echo 'Descompactando arquivo....';

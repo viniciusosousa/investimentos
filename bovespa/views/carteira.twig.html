@@ -1,0 +1,70 @@
+{% extend "default.twig.html" %}
+{% block titulo %}Carteira{% endblock %}
+{% use "input_operacoes.twig.html" %}
+{% block conteudo %}
+<div class="table-responsive-sm">
+{% for linha in model.carteira() %}
+	<div class="card">
+	<div class="card-header">
+	<a href="'.>home(true).'?
+		v=acao&cod_papel='.$linha['COD_PAPEL'].'"><h5 class="float-left">'.$linha['COD_PAPEL'].' - '.$linha['NOM_RES'].'</h5></a> <h4 class="float-right">'.$this->formatData('PRECO',$linha['vl_unit_aplicacao']).'/'.$this->formatData('PRECO',$linha['PRECO_ULT']).'</h4></div>';
+			echo '<div class="card-body">';
+			echo '<table class="table table-sm text-center">';
+			echo '<thead><tr><th></th>';
+			$this->addParams('orderby', 'var_aplicacao');
+			echo '<th><a href="'.$this->home().'">C</a></th>';
+			$this->removeParams('orderby');
+			$this->addParams('orderby', 'VAR_DIA');
+			echo '<th><a href="'.$this->home().'">D</a></th>';
+			$this->removeParams('orderby');
+			$this->addParams('orderby', 'VAR_MES');
+			echo '<th><a href="'.$this->home().'">M</a></th>';
+			$this->removeParams('orderby');
+			$this->addParams('orderby', 'VAR_ANO');
+			echo '<th><a href="'.$this->home().'">A</a></th>';
+			$this->removeParams('orderby');
+			if($this->orderby) $this->addParams('orderby', $this->orderby);
+			echo '</tr></thead>';
+			echo '<tbody>';
+			echo '<tr><td>Ultimo</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['var_aplicacao']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_DIA']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_MES']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_ANO']).'</td></tr>';
+			echo '<tr><td>Medio</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['var_aplicacao_med']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_DIA_MED']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_MES_MED']).'</td>';
+			echo '<td>'.$this->formatData('VAR',$linha['VAR_ANO_MED']).'</td></tr>';
+			$this->addParams('orderby', 'QTD_TOTAL');
+			echo '<tr><td colspan="5"><a href="'.$this->home().'">Volume</a>: '.$this->formatData('QTD',$linha['QTD_TOTAL']).'</td></tr>';
+			$this->removeParams('order_by');
+			$this->addParams('orderby', 'saldo_operacao');
+			echo '<tr><td colspan="5"><a href="'.$this->home().'">Saldo</a>: '.$this->formatData('PRECO',$linha['saldo_operacao']).'</td></tr>';
+			$this->removeParams('saldo_operacao');
+			$this->addParams('oderby', 'saldo_acumulado');
+			echo '<tr><td colspan="5"><a href="'.$this->home().'">Saldo Acum.</a>: '.$this->formatData('PRECO',$linha['saldo_acumulado']).'</td></tr>';
+			$this->removeParams('saldo_acumulado');
+			echo '<tr><td colspan="5">Valor: '.$this->formatData('PRECO',$linha['montante_atual']).'</td></tr>';
+			$operacoes = $this->model->carregaOperacoes($linha['COD_PAPEL']);
+			echo '</tbody>';
+			echo '</table>';
+			echo '<center><b><u>Operacoes</u></b></center>';
+			echo '<div class="table-responsive">';
+			echo '<table class="table table-sm"><tr><th>dia</th><th>tipo</th><th>qtd</th><th>vl unit.</th><th>vl total</th><th>resultado</th></tr>';
+			foreach ($operacoes as $operacao){
+				echo '<tr><td>'.date('d/m/y', strtotime($operacao['DATA_OPERACAO'])).'</td>';
+				echo '<td>'.(($operacao['ID_TIPO_OPERACAO']=='1')?'C':'V').'</td>';
+				echo '<td>'.$this->formatData('QTD',$operacao['QTD']*(($operacao['ID_TIPO_OPERACAO']=='1')?1:-1)).'</td>';
+				echo '<td>'.$this->formatData('PRECO',$operacao['VALOR_UNITARIO']*(($operacao['ID_TIPO_OPERACAO']=='1')?1:-1)).'</td>';
+				echo '<td>'.$this->formatData('PRECO',$operacao['vl_total']).'</td>';
+				echo '<td>'.$this->formatData('PRECO',$operacao['resultado']).'</td></tr>';
+			}
+			echo '</table>';
+			echo '</div>';
+			echo '</div></div>';
+		}
+?>
+</div>
+{% endfor %}
+{% endblock %}
