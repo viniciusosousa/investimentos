@@ -58,20 +58,20 @@ class Model
         fclose($file);
 
         $qtdSql = count($sql);
-        echo '<code>';
+       // echo '<code>';
         Model::Connect();
         for ($x=0; $x < $qtdSql; $x++ ){
             if (!empty(trim($sql[$x]))){
-                		echo $sql[$x]."......";
+                	//	echo $sql[$x]."......";
 			              if (Model::$conn->query($sql[$x]) === TRUE) {
-				                 echo '<span style="color: green">ok</span><br><br>';
+				                // echo '<span style="color: green">ok</span><br><br>';
 			              } else {
-				                 echo '<span style="color: red">Erro: '.Model::$conn->error.'</span><br><br>';
+				                // echo '<span style="color: red">Erro: '.Model::$conn->error.'</span><br><br>';
 			              }
            }
 
         }
-        echo '</code>';
+        //echo '</code>';
     }
 
     public function orderby($default){
